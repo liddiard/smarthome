@@ -17,7 +17,12 @@ from kasa import SmartDimmer
 
 HOST = "192.168.0.19"
 HALF_HOUR_IN_MS = 60*30*1000
-TIME_FORMAT = "%H:%M"
+
+
+def format_time(time):
+    """Takes datetime and returns 24-hour, zero-padded time in format HH:MM
+    """
+    return time.strftime("%H:%M")
 
 
 def get_schedule():
@@ -32,12 +37,14 @@ def get_schedule():
     )
 
     s = sun(location.observer, date=date.today(), tzinfo=location.timezone)
-    sunrise = s["sunrise"].strftime(TIME_FORMAT)
-    sunset = s["sunset"].strftime(TIME_FORMAT)
+    dawn = format_time(s["dawn"])
+    sunrise = format_time(s["sunrise"])
+    sunset = format_time(s["sunset"])
 
     # map from 24-hour time to brightness level (0-100)
     return {
         "02:00": 1,
+        dawn: 10,
         sunrise: 100,
         sunset: 67,
         "22:30": 33,
@@ -46,7 +53,7 @@ def get_schedule():
 
 
 async def main():
-    current_time = datetime.now().strftime(TIME_FORMAT)
+    current_time = format_time(datetime.now())
     schedule = get_schedule()
     print(f"\nCurrent time: {current_time}")
 
