@@ -1,3 +1,12 @@
+"""Dimming schedule for TP-Link Kasa HS220 model dimmer switch used in my
+bathroom in my 2021-2022 NYC apartment. Needed a script for this because none
+of the apps/services I tried (Kasa, Alexa, Yonomi) allow setting dimmer
+brightness without also turning the switch on at the same time.
+
+Intended to be used on a cron job that runs every minute like:
+* * * * * /Users/hliddiard/Developer/smarthome/bin/python3 /Users/hliddiard/Developer/smarthome/repo/tplink/bathroom_dimmer.py >> /Users/hliddiard/Developer/smarthome/repo 2>&1
+"""
+
 import asyncio
 from datetime import datetime, date
 
