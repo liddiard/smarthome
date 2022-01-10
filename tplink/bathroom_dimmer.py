@@ -4,7 +4,7 @@ of the apps/services I tried (Kasa, Alexa, Yonomi) allow setting dimmer
 brightness without also turning the switch on at the same time.
 
 Intended to be used on a cron job that runs every minute like:
-* * * * * /Users/hliddiard/Developer/smarthome/bin/python3 /Users/hliddiard/Developer/smarthome/repo/tplink/bathroom_dimmer.py >> /Users/hliddiard/Developer/smarthome/repo 2>&1
+* * * * * /Users/hliddiard/Developer/smarthome/bin/python3 /Users/hliddiard/Developer/smarthome/repo/tplink/bathroom_dimmer.py >> /Users/hliddiard/Developer/smarthome/repo/cron.log 2>&1
 """
 
 import asyncio
