@@ -29,7 +29,7 @@ def get_schedule():
     """Returns today's schedule based on current sunrise and sunset times
     """
     location = LocationInfo(
-        "New York City",
+        "New York, NY",
         "United States",
         "America/New_York",
         40.7, # lat
