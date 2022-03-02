@@ -5,51 +5,38 @@ brightness without also turning the switch on at the same time.
 
 Intended to be used on a cron job that runs every minute like:
 BASE_PATH=/Users/hliddiard/Developer/smarthome
-* * * * * "${BASE_PATH}/bin/python3" "${BASE_PATH}/repo/tplink/bathroom_dimmer.py" >> "${BASE_PATH}/repo/cron.log" 2>&1
+* * * * * "${BASE_PATH}/bin/python3" "${BASE_PATH}/repo/src/bathroom_dimmer.py" >> "${BASE_PATH}/repo/cron.log" 2>&1
 """
 
 import asyncio
-from datetime import datetime, date
+from datetime import datetime
 
-from astral import LocationInfo
-from astral.sun import sun
 from kasa import SmartDimmer
+
+from utils import format_time, get_sun_events
 
 
 HOST = "192.168.0.19"
 HALF_HOUR_IN_MS = 60*30*1000
 
 
-def format_time(time):
-    """Takes datetime and returns 24-hour, zero-padded time in format HH:MM
-    """
-    return time.strftime("%H:%M")
-
-
 def get_schedule():
     """Returns today's schedule based on current sunrise and sunset times
     """
-    location = LocationInfo(
-        "New York, NY",
-        "United States",
-        "America/New_York",
-        40.7, # lat
-        -73.9 # lon
-    )
-
-    s = sun(location.observer, date=date.today(), tzinfo=location.timezone)
-    dawn = format_time(s["dawn"])
-    sunrise = format_time(s["sunrise"])
-    sunset = format_time(s["sunset"])
+    sun_events = get_sun_events()
+    dawn = sun_events["dawn"]
+    sunrise = sun_events["sunrise"]
+    sunset = sun_events["sunset"]
 
     # map from 24-hour time to brightness level (0-100)
     return {
-        "02:00": 1,
+        "02:00": 10,
+        "03:00": 1,
         dawn: 10,
         sunrise: 100,
         sunset: 67,
-        "22:30": 33,
-        "23:30": 10
+        "23:00": 33,
+        "00:00": 20
     }
 
 
@@ -66,9 +53,14 @@ async def main():
         dimmer = SmartDimmer(HOST)
         # await update to get access to current props before modifying
         await dimmer.update()
+        # print(dimmer.state_information)
 
-        await dimmer.set_brightness(brightness, transition=HALF_HOUR_IN_MS)
+        await dimmer.set_brightness(brightness) # transition=HALF_HOUR_IN_MS
         print(f"Started transition to brightness {brightness} at {current_time}")
+
+        # if dimmer.state_information['On since'] is None:
+        #     print("Switch was off; forcing it to stay off")
+        #     await dimmer.turn_off()
     else:
         print("Time not in schedule; exiting")
 
