@@ -82,7 +82,7 @@ async def main():
             is_on = state.get_state()
             await bulb.turn_on(PilotBuilder(
                 colortemp = color_temp, 
-                scene = SCENES[scene])
+                scene = SCENES.get(scene))
             )
             if not is_on:
                 await bulb.turn_off()
