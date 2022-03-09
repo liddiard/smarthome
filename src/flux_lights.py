@@ -26,10 +26,6 @@ So as a workaround, we're allowing an off bulb to turn on to change the
 color temp, then immediately turn it off. There's sometimes a brief flash
 when this happens, but it's mitigated by setting the bulb's "On fade-in" to
 0.5s and "Off fade-out" to 0s.
-
-If scenes are desired in the future, see integer code to scene name mapping
-reference here: 
-https://github.com/sbidy/pywizlight/blob/master/pywizlight/scenes.py
 """
 
 import asyncio
@@ -45,6 +41,12 @@ HOSTS = [
     "192.168.0.16"  # entryway
 ]
 
+# https://github.com/sbidy/pywizlight/blob/master/pywizlight/scenes.py
+SCENES = {
+    "Cozy": 6,
+    "Night light": 14
+}
+
 
 def get_schedule():
     """Returns today's schedule based on current sunrise and sunset times
@@ -55,9 +57,10 @@ def get_schedule():
 
     # map from 24-hour time to color temp (2200-6200 Kelvin)
     return {
-        sunrise: 3000,
-        sunset: 2700,
-        "00:00": 2200
+        sunrise: { "color_temp": 3000 },
+        sunset:  { "color_temp": 2700 },
+        "23:00": { "scene": "Cozy" },
+        "02:00": { "scene": "Night light" }
     }
 
 
@@ -67,14 +70,20 @@ async def main():
     print(f"\nCurrent time: {current_time}")
 
     if current_time in schedule:
-        color_temp = schedule[current_time]
-        print(f"Time in schedule; setting color temp {color_temp}K")
+        adjustments = schedule[current_time]
+        color_temp = adjustments.get("color_temp")
+        scene = adjustments.get("scene")
+        
+        print(f"Time in schedule; setting color temp: {color_temp}, scene: {scene}")
 
         for bulb_ip in HOSTS:
             bulb = wizlight(bulb_ip)
             state = await bulb.updateState()
             is_on = state.get_state()
-            await bulb.turn_on(PilotBuilder(colortemp = color_temp))
+            await bulb.turn_on(PilotBuilder(
+                colortemp = color_temp, 
+                scene = SCENES[scene])
+            )
             if not is_on:
                 await bulb.turn_off()
     else:
@@ -82,4 +91,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
