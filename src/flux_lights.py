@@ -57,10 +57,10 @@ def get_schedule():
 
     # map from 24-hour time to color temp (2200-6200 Kelvin)
     return {
-        sunrise: { "color_temp": 3000 },
-        sunset:  { "color_temp": 2700 },
-        "23:00": { "scene": "Cozy" },
-        "02:00": { "scene": "Night light" }
+        sunrise: { "brightness": 100, "colortemp": 3000 },
+        sunset:  { "colortemp": 2700 },
+        "23:00": { "scene": SCENES["Cozy"] },
+        "02:00": { "scene": SCENES["Night light"] }
     }
 
 
@@ -71,19 +71,14 @@ async def main():
 
     if current_time in schedule:
         adjustments = schedule[current_time]
-        color_temp = adjustments.get("color_temp")
-        scene = adjustments.get("scene")
         
-        print(f"Time in schedule; setting color temp: {color_temp}, scene: {scene}")
+        print(f"Time in schedule; setting adjustments: {adjustments}")
 
         for bulb_ip in HOSTS:
             bulb = wizlight(bulb_ip)
             state = await bulb.updateState()
             is_on = state.get_state()
-            await bulb.turn_on(PilotBuilder(
-                colortemp = color_temp, 
-                scene = SCENES.get(scene))
-            )
+            await bulb.turn_on(PilotBuilder(**adjustments))
             if not is_on:
                 await bulb.turn_off()
     else:
