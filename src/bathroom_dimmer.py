@@ -26,6 +26,7 @@ def get_schedule():
     sun_events = get_sun_events()
     dawn = sun_events["dawn"]
     sunrise = sun_events["sunrise"]
+    hour_before_sunset = sun_events["hour_before_sunset"]
     sunset = sun_events["sunset"]
 
     # map from 24-hour time to brightness level (0-100)
@@ -34,6 +35,7 @@ def get_schedule():
         "03:00": 1,
         dawn: 10,
         sunrise: 100,
+        hour_before_sunset: 80,
         sunset: 67,
         "23:00": 33,
         "01:00": 20

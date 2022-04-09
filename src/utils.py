@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from astral import LocationInfo
 from astral.sun import sun
@@ -26,5 +26,6 @@ def get_sun_events():
 
     for key, value in schedule.items():
         events[key] = format_time(value)
+    events["hour_before_sunset"] = schedule["sunset"] + timedelta(hours=1)
     
     return events
