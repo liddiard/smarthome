@@ -67,12 +67,12 @@ def get_schedule():
 async def main():
     current_time = format_time(datetime.now())
     schedule = get_schedule()
-    print(f"\nCurrent time: {current_time}")
+    # print(f"\nCurrent time: {current_time}")
 
     if current_time in schedule:
         adjustments = schedule[current_time]
         
-        print(f"Time in schedule; setting adjustments: {adjustments}")
+        print(f"Time {current_time} in schedule; setting adjustments: {adjustments}")
 
         for bulb_ip in HOSTS:
             bulb = wizlight(bulb_ip)
@@ -82,7 +82,8 @@ async def main():
             if not is_on:
                 await bulb.turn_off()
     else:
-        print("Time not in schedule; exiting")
+        # print("Time not in schedule; exiting")
+        pass
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>AC Thermostat</title>
     <style>
       :root {
         --v2black: #0c0c0d;
@@ -33,7 +34,7 @@
         top: 0;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 10vw;
+        font-size: max(12rem, 12vw);
         font-weight: bold;
         color: var(--v2gray300);
         cursor: pointer;
@@ -74,7 +75,7 @@
         font-weight: bold;
       }
       .arrow {
-        font-size: 8vw;
+        font-size: max(8rem, 8vw);
         cursor: pointer;
         user-select: none;
       }
@@ -145,7 +146,7 @@
             fetch('/api/v1/temp/').then(res => res.json()),
             fetch('/api/v1/thermostat/').then(res => res.json()),
           ])
-          this.currentTemp = currentTemp.toFixed()
+          this.currentTemp = Math.round(currentTemp)
           this.thermostat = thermostat
         },
         data() {
@@ -164,13 +165,18 @@
         },
         watch: {
           thermostat: {
-            async handler({ temp, on }) {
+            async handler(newValue, oldValue) {
+              if (!Object.keys(oldValue).length) {
+                // don't do anything if the old value was empty so we don't
+                // send a PATCH on initial page load
+                return
+              }
               await fetch('/api/v1/thermostat/', {
                 method: 'PATCH',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ temp, on })
+                body: JSON.stringify(newValue)
               })
             },
             deep: true

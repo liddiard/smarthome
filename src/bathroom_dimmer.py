@@ -64,7 +64,8 @@ async def main():
         #     print("Switch was off; forcing it to stay off")
         #     await dimmer.turn_off()
     else:
-        print("Time not in schedule; exiting")
+        # print("Time not in schedule; exiting")
+        pass
 
 
 if __name__ == "__main__":
