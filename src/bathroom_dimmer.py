@@ -45,11 +45,11 @@ def get_schedule():
 async def main():
     current_time = format_time(datetime.now())
     schedule = get_schedule()
-    print(f"\nCurrent time: {current_time}")
+    # print(f"\nCurrent time: {current_time}")
 
     if current_time in schedule:
         brightness = schedule[current_time]
-        print(f"Time in schedule; setting brightness {brightness}")
+        print(f"Time {current_time} in schedule; setting brightness {brightness}")
 
         # https://python-kasa.readthedocs.io/en/latest/smartdimmer.html
         dimmer = SmartDimmer(HOST)
