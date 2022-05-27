@@ -48,7 +48,7 @@ app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, 'index.html')))
 
 app.get('/api/v1/temp/', async (req, res) => {
-  const prometheusRes = await axios.get('http://pi:9090/api/v1/query?query=atmp{}[5m]')
+  const prometheusRes = await axios.get('http://localhost:9090/api/v1/query?query=atmp{}[5m]')
   const temps = prometheusRes.data.data.result[0].values.map(([_, temp]) => Number(temp))
   return res.json(getMedian(temps))
 })
