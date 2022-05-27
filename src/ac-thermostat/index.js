@@ -1,4 +1,5 @@
-const fs = require('fs/promises')
+const fs = require('fs')
+const { promisify } = require('util')
 const path = require('path')
 
 const express = require('express')
@@ -8,13 +9,15 @@ const axios = require('axios')
 
 const app = express()
 app.use(bodyParser.json())
+const readFile = promisify(fs.readFile)
+const writeFile = promisify(fs.writeFile)
 
 const port = 3000
 const thermostatFilename = path.join(__dirname, 'thermostat.json')
 
 
 const getThermostat = async () => {
-  const text = await fs.readFile(thermostatFilename, 'utf8')
+  const text = await readFile(thermostatFilename, 'utf8')
   return JSON.parse(text)
 }
 
@@ -62,7 +65,7 @@ app.patch('/api/v1/thermostat/', async (req, res) => {
     ...thermostat,
     ...req.body
   }
-  await fs.writeFile(thermostatFilename, JSON.stringify(newThermostat, null, 2))
+  await writeFile(thermostatFilename, JSON.stringify(newThermostat, null, 2))
   return res.json(newThermostat)
 })
 
