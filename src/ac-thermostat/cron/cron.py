@@ -30,15 +30,15 @@ async def main():
     # if the thermostat is off, turn off the AC and stop processing rules
     if thermostat["on"] is False:
         if ac.is_on:
-            print("Thermostat is off but AC is on, turning off AC")
+            print("Thermostat is off but AC is on, turning OFF AC.")
             await ac.turn_off()
         return
 
     if ac.is_on and current_temp < thermostat_temp - ALLOWED_DEVIATION_DEGREES:
-        print(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning off AC.")
+        print(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning OFF AC.")
         await ac.turn_off()
     elif ac.is_off and current_temp > thermostat_temp + ALLOWED_DEVIATION_DEGREES:
-        print(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning on AC.")
+        print(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning ON AC.")
         await ac.turn_on()
 
 
