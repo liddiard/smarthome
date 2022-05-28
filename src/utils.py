@@ -1,7 +1,13 @@
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 
 from astral import LocationInfo
 from astral.sun import sun
+
+
+def log(msg):
+    """Logs provided messsage with prepended timestamp"""
+    timestamp = datetime.now().isoformat(" ", "seconds")
+    return f"[{timestamp}] {msg}"
 
 
 def format_time(time):

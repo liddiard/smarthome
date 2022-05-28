@@ -33,7 +33,7 @@ from datetime import datetime
 
 from pywizlight import wizlight, PilotBuilder, discovery
 
-from utils import format_time, get_sun_events
+from utils import log, format_time, get_sun_events
 
 
 HOSTS = [
@@ -67,12 +67,12 @@ def get_schedule():
 async def main():
     current_time = format_time(datetime.now())
     schedule = get_schedule()
-    # print(f"\nCurrent time: {current_time}")
+    # log(f"\nCurrent time: {current_time}")
 
     if current_time in schedule:
         adjustments = schedule[current_time]
         
-        print(f"Time {current_time} in schedule; setting adjustments: {adjustments}")
+        log(f"Time {current_time} in schedule; setting adjustments: {adjustments}")
 
         for bulb_ip in HOSTS:
             bulb = wizlight(bulb_ip)
@@ -82,7 +82,7 @@ async def main():
             if not is_on:
                 await bulb.turn_off()
     else:
-        # print("Time not in schedule; exiting")
+        # log("Time not in schedule; exiting")
         pass
 
 

@@ -13,7 +13,7 @@ from datetime import datetime
 
 from kasa import SmartDimmer
 
-from utils import format_time, get_sun_events
+from utils import log, format_time, get_sun_events
 
 
 HOST = "192.168.0.19"
@@ -45,26 +45,26 @@ def get_schedule():
 async def main():
     current_time = format_time(datetime.now())
     schedule = get_schedule()
-    # print(f"\nCurrent time: {current_time}")
+    # log(f"\nCurrent time: {current_time}")
 
     if current_time in schedule:
         brightness = schedule[current_time]
-        print(f"Time {current_time} in schedule; setting brightness {brightness}")
+        log(f"Time {current_time} in schedule; setting brightness {brightness}")
 
         # https://python-kasa.readthedocs.io/en/latest/smartdimmer.html
         dimmer = SmartDimmer(HOST)
         # await update to get access to current props before modifying
         await dimmer.update()
-        # print(dimmer.state_information)
+        # log(dimmer.state_information)
 
         await dimmer.set_brightness(brightness) # transition=HALF_HOUR_IN_MS
-        print(f"Started transition to brightness {brightness} at {current_time}")
+        log(f"Started transition to brightness {brightness} at {current_time}")
 
         # if dimmer.state_information['On since'] is None:
-        #     print("Switch was off; forcing it to stay off")
+        #     log("Switch was off; forcing it to stay off")
         #     await dimmer.turn_off()
     else:
-        # print("Time not in schedule; exiting")
+        # log("Time not in schedule; exiting")
         pass
 
 

@@ -4,6 +4,9 @@ import asyncio
 
 from kasa import SmartPlug
 
+from utils import log
+
+
 # permissible deviation in degrees Celcius that the temperature may go above
 # or below the target thermostat temperature before the AC turns on/off
 ALLOWED_DEVIATION_DEGREES = 0.5
@@ -30,15 +33,15 @@ async def main():
     # if the thermostat is off, turn off the AC and stop processing rules
     if thermostat["on"] is False:
         if ac.is_on:
-            print("Thermostat is off but AC is on, turning OFF AC.")
+            log("Thermostat is off but AC is on, turning AC OFF.")
             await ac.turn_off()
         return
 
     if ac.is_on and current_temp < thermostat_temp - ALLOWED_DEVIATION_DEGREES:
-        print(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning OFF AC.")
+        log(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning AC OFF.")
         await ac.turn_off()
     elif ac.is_off and current_temp > thermostat_temp + ALLOWED_DEVIATION_DEGREES:
-        print(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning ON AC.")
+        log(f"Thermostat: {thermostat_temp}, Current temp: {current_temp}. Turning AC ON.")
         await ac.turn_on()
 
 
