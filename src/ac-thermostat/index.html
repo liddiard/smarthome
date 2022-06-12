@@ -74,6 +74,14 @@
         display: block;
         font-weight: bold;
       }
+      button {
+        background: none;
+        border-radius: 0;
+        border: none;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+      }
       .arrow {
         font-size: max(8rem, 8vw);
         cursor: pointer;
@@ -99,21 +107,21 @@
   </head>
   <body>
     <div id="app">
-      <section id="power" role="button" tabindex="0" :class="{ on: thermostat.on }" @click="thermostat.on = !thermostat.on">
+      <button type="button" id="power" :class="{ on: thermostat.on }" @click="thermostat.on = !thermostat.on">
         <span class="fg">⏻</span>
         <span class="bg">⏻</span>
-      </section>
+      </button>
       <section>
         <label for="thermostat">Thermostat</label>
-        <div role="button" class="up arrow" tabindex="0" @click="thermostat.temp++">▲</div>
+        <button type="button" class="up arrow" @click="thermostat.temp++">▲</button>
         <div id="thermostat" class="stat" :style="{ color: thermostatColor }">{{ thermostat.temp }}</div>
-        <div role="button" class="down arrow" tabindex="0" @click="thermostat.temp--">▼</div>
+        <button type="button" class="down arrow" @click="thermostat.temp--">▼</button>
       </section>
       <section>
         <label for="temp">Current Temperature</label>
-        <div role="button" class="arrow invisible">▲</div>
+        <div class="arrow invisible">▲</div>
         <div id="temp" class="stat" :style="{ color: tempColor }">{{ currentTemp }}</div>
-        <div role="button" class="arrow invisible">▼</div>
+        <div class="arrow invisible">▼</div>
       </section>
     </div>
 
