@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <title>AC Thermostat</title>
     <style>
+      @font-face {
+        font-family: 'power_symbols';
+        src: url('Unicode_IEC_symbol.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
       :root {
         --v2black: #0c0c0d;
         --v2orange400: #d9360b;
@@ -19,7 +26,7 @@
       }
       body, input {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Roboto, sans-serif;
         color: var(--v2black);
       }
       #app {
@@ -39,6 +46,8 @@
         color: var(--v2gray300);
         cursor: pointer;
         user-select: none;
+	font-family: 'power_symbols';
+	font-weight: 200;
       }
       #power.on {
         color: var(--v2green300);
