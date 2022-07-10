@@ -106,6 +106,9 @@
         visibility: hidden;
       }
     </style>
+  </head>
+  <body>
+    <script async src="https://unpkg.com/es-module-shims@1/dist/es-module-shims.js"></script>
     <script type="importmap">
       {
         "imports": {
@@ -113,8 +116,6 @@
         }
       }
     </script>
-  </head>
-  <body>
     <div id="app">
       <button type="button" id="power" :class="{ on: thermostat.on }" @click="thermostat.on = !thermostat.on">
         <span class="fg">⏻</span>
