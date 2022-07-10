@@ -34,7 +34,7 @@ def get_schedule():
         "02:00": 10,
         "03:00": 1,
         dawn: 10,
-        sunrise: 100,
+        sunrise: 80,
         hour_before_sunset: 80,
         sunset: 67,
         "23:00": 33,
