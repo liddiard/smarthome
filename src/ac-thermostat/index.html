@@ -29,6 +29,9 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Roboto, sans-serif;
         color: var(--v2black);
       }
+      [v-cloak] {
+        display: none;
+      }
       #app {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -79,7 +82,7 @@
         width: 100%;
       }
       label {
-        font-size: 3vw;
+        font-size: 4vw;
         display: block;
         font-weight: bold;
       }
@@ -124,13 +127,13 @@
       <section>
         <label for="thermostat">Thermostat</label>
         <button type="button" class="up arrow" @click="thermostat.temp++">▲</button>
-        <div id="thermostat" class="stat" :style="{ color: thermostatColor }">{{ thermostat.temp }}</div>
+        <div id="thermostat" class="stat" :style="{ color: thermostatColor }" v-cloak>{{ thermostat.temp }}</div>
         <button type="button" class="down arrow" @click="thermostat.temp--">▼</button>
       </section>
       <section>
-        <label for="temp">Current Temperature</label>
+        <label for="temp">Current Temp</label>
         <div class="arrow invisible">▲</div>
-        <div id="temp" class="stat" :style="{ color: tempColor }">{{ currentTemp }}</div>
+        <div id="temp" class="stat" :style="{ color: tempColor }" v-cloak>{{ currentTemp }}</div>
         <div class="arrow invisible">▼</div>
       </section>
     </div>
