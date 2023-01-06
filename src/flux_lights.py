@@ -57,7 +57,7 @@ def get_schedule():
 
     # map from 24-hour time to color temp (2200-6200 Kelvin)
     return {
-        sunrise: { "colortemp": 3000 },
+        sunrise: { "colortemp": 3000, "brightness": 255 },
         sunset:  { "colortemp": 2700 },
         "23:00": { "scene": SCENES["Cozy"] },
         "02:00": { "brightness": 1 }
