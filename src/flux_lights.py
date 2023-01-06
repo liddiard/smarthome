@@ -59,7 +59,6 @@ def get_schedule(bulb_name):
     # allows adding/overriding schedule entries for specific bulbs
     schedule = {
         "BASE": {
-            sunrise: { "colortemp": 3000 },
             sunset:  { "colortemp": 2700 },
             "23:00": { "scene": SCENES["Cozy"] },
             "02:00": { "brightness": 1 }
@@ -68,7 +67,7 @@ def get_schedule(bulb_name):
             sunrise: { "colortemp": 3000, "brightness": 255 }
         },
         "ENTRYWAY": {
-            "sunrise": { "colortemp": 3000, "brightness": 200 }
+            sunrise: { "colortemp": 3000, "brightness": 192 }
         }
     }
 
