@@ -36,10 +36,10 @@ from pywizlight import wizlight, PilotBuilder, discovery
 from utils import log, format_time, get_sun_events
 
 
-HOSTS = [
-    "192.168.0.15", # kitchen ceiling
-    "192.168.0.16"  # entryway
-]
+HOSTS = {
+    "KITCHEN_CEILING": "192.168.0.15",
+    "ENTRYWAY": "192.168.0.16"
+}
 
 # https://github.com/sbidy/pywizlight/blob/master/pywizlight/scenes.py
 SCENES = {
@@ -48,42 +48,51 @@ SCENES = {
 }
 
 
-def get_schedule():
+def get_schedule(bulb_name):
     """Returns today's schedule based on current sunrise and sunset times
     """
     sun_events = get_sun_events()
     sunrise = sun_events["sunrise"]
     sunset = sun_events["sunset"]
 
-    # map from 24-hour time to color temp (2200-6200 Kelvin)
-    return {
-        sunrise: { "colortemp": 3000, "brightness": 255 },
-        sunset:  { "colortemp": 2700 },
-        "23:00": { "scene": SCENES["Cozy"] },
-        "02:00": { "brightness": 1 }
+    # map from 24-hour time to color temp (2200-6200 Kelvin) and other props
+    # allows adding/overriding schedule entries for specific bulbs
+    schedule = {
+        "BASE": {
+            sunrise: { "colortemp": 3000 },
+            sunset:  { "colortemp": 2700 },
+            "23:00": { "scene": SCENES["Cozy"] },
+            "02:00": { "brightness": 1 }
+        },
+        "KITCHEN_CEILING": {
+            sunrise: { "colortemp": 3000, "brightness": 255 }
+        },
+        "ENTRYWAY": {
+            "sunrise": { "colortemp": 3000, "brightness": 200 }
+        }
     }
+
+    return schedule["BASE"] | schedule.get(bulb_name, {})
 
 
 async def main():
     current_time = format_time(datetime.now())
-    schedule = get_schedule()
-    # log(f"\nCurrent time: {current_time}")
 
-    if current_time in schedule:
+    for bulb_name, bulb_ip in HOSTS.items():
+        schedule = get_schedule(bulb_name)
+
+        if current_time not in schedule:
+            continue
+
         adjustments = schedule[current_time]
-        
         log(f"Time {current_time} in schedule; setting adjustments: {adjustments}")
 
-        for bulb_ip in HOSTS:
-            bulb = wizlight(bulb_ip)
-            state = await bulb.updateState()
-            is_on = state.get_state()
-            await bulb.turn_on(PilotBuilder(**adjustments))
-            if not is_on:
-                await bulb.turn_off()
-    else:
-        # log("Time not in schedule; exiting")
-        pass
+        bulb = wizlight(bulb_ip)
+        state = await bulb.updateState()
+        is_on = state.get_state()
+        await bulb.turn_on(PilotBuilder(**adjustments))
+        if not is_on:
+            await bulb.turn_off()
 
 
 if __name__ == "__main__":
