@@ -1,5 +1,5 @@
 {
-  "on": true,
+  "on": false,
   "temp": 22,
   "unit": "C"
 }

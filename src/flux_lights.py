@@ -60,7 +60,7 @@ def get_schedule():
         sunrise: { "colortemp": 3000 },
         sunset:  { "colortemp": 2700 },
         "23:00": { "scene": SCENES["Cozy"] },
-        "02:00": { "scene": SCENES["Night light"] }
+        "02:00": { "brightness": 1 }
     }
 
 
