@@ -72,7 +72,7 @@ def get_schedule(bulb_name):
         }
     }
 
-    return schedule["BASE"] | schedule.get(bulb_name, {})
+    return { **schedule["BASE"], **schedule.get(bulb_name, {}) }
 
 
 async def main():
