@@ -197,7 +197,7 @@
         watch: {
           thermostat: {
             async handler(newValue, oldValue) {
-              document.title = `Thermostat: ${newValue}°${this.thermostat.unit}`
+              document.title = `Thermostat: ${newValue.temp}°${this.thermostat.unit}`
               if (!Object.keys(oldValue).length) {
                 // don't do anything if the old value was empty so we don't
                 // send a PATCH on initial page load
