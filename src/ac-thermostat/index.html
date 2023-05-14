@@ -122,6 +122,7 @@
   </head>
   <body>
     <script async src="https://unpkg.com/es-module-shims@1/dist/es-module-shims.js"></script>
+    <script src="https://unpkg.com/lodash.isequal"></script>
     <script type="importmap">
       {
         "imports": {
@@ -214,7 +215,7 @@
                 // don't send an update if the old value was empty...
                 !Object.keys(oldValue).length ||
                 // or if the new temperature value is the same as the old one...
-                oldValue.temp === newValue.temp
+                _.isEqual(oldValue, newValue)
               ) {
                 // so we don't send an update on page load or when polling for
                 // updates from the server
