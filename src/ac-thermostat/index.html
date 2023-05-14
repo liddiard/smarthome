@@ -185,7 +185,7 @@
         async mounted() {
           await this.updateTemp()
           // update the temp and thermostat from server every 60 sec
-          setInterval(() => this.updateTemp, 60*1000)
+          setInterval(this.updateTemp, 60*1000)
         },
         data() {
           return {
