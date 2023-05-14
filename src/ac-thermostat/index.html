@@ -124,8 +124,7 @@
     <script type="importmap">
       {
         "imports": {
-          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-          "lodash": "https://unpkg.com/lodash-es@4"
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
         }
       }
     </script>
@@ -150,7 +149,12 @@
 
     <script type="module">
       import { createApp } from 'vue'
-      import { isEqual } from 'lodash'
+
+      // do a SHALLOW comparison of two object for equal values
+      const isEqual = (obj1, obj2) =>
+        Object.keys(obj1).length === Object.keys(obj2).length &&
+        Object.entries(obj1)
+        .every(([ key, val ]) => obj2[key] === val);
 
       const tempToColorMap = {
         18: '#1072EB',
