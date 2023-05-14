@@ -215,7 +215,7 @@
                 // don't send an update if the old value was empty...
                 !Object.keys(oldValue).length ||
                 // or if the new temperature value is the same as the old one...
-                _.isEqual(oldValue, newValue)
+                isEqual(oldValue, newValue)
               ) {
                 // so we don't send an update on page load or when polling for
                 // updates from the server
