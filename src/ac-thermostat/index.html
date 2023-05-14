@@ -172,13 +172,15 @@
       }
     
       createApp({
-        async updateTemp() {
-          const [currentTemp, thermostat] = await Promise.all([
-            fetch('/api/v1/temp/').then(res => res.json()),
-            fetch('/api/v1/thermostat/').then(res => res.json()),
-          ])
-          this.currentTemp = Math.round(currentTemp)
-          this.thermostat = thermostat
+        methods: {
+          async updateTemp() {
+            const [currentTemp, thermostat] = await Promise.all([
+              fetch('/api/v1/temp/').then(res => res.json()),
+              fetch('/api/v1/thermostat/').then(res => res.json()),
+            ])
+            this.currentTemp = Math.round(currentTemp)
+            this.thermostat = thermostat
+          }
         },
         async mounted() {
           await this.updateTemp()
