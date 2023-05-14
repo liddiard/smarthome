@@ -205,9 +205,14 @@
           thermostat: {
             async handler(newValue, oldValue) {
               document.title = `Thermostat: ${newValue.temp}°${this.thermostat.unit}`
-              if (!Object.keys(oldValue).length) {
-                // don't do anything if the old value was empty so we don't
-                // send a PATCH on initial page load
+              if (
+                // don't send an update if the old value was empty...
+                !Object.keys(oldValue).length ||
+                // or if the new temperature value is the same as the old one...
+                oldValue.temp === newValue.temp
+              ) {
+                // so we don't send an update on page load or when polling for
+                // updates from the server
                 return
               }
               await fetch('/api/v1/thermostat/', {
