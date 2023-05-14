@@ -194,6 +194,11 @@
           }
         },
         computed: {
+          // fix issue with old and new value being the same in `watch` method
+          // https://stackoverflow.com/a/74945916
+          thermostatComputed() {
+            return Object.assign({}, this.thermostat)
+          },
           thermostatColor() {
             return getTempColor(this.thermostat.temp)
           },
@@ -202,7 +207,7 @@
           }
         },
         watch: {
-          thermostat: {
+          thermostatComputed: {
             async handler(newValue, oldValue) {
               document.title = `Thermostat: ${newValue.temp}°${this.thermostat.unit}`
               if (
