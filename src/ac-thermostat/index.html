@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AC Thermostat</title>
+    <title>Thermostat</title>
+    <!-- https://css-tricks.com/emoji-as-a-favicon/ -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❄️</text></svg>">
     <style>
       @font-face {
         font-family: 'power_symbols';
@@ -119,7 +121,6 @@
     </style>
   </head>
   <body>
-    <script async src="https://unpkg.com/es-module-shims@1/dist/es-module-shims.js"></script>
     <script type="importmap">
       {
         "imports": {
@@ -133,21 +134,27 @@
         <span class="bg">⏻</span>
       </button>
       <section>
-        <label for="thermostat">Thermostat</label>
-        <button type="button" class="up arrow" @click="thermostat.temp++">▲</button>
-        <div id="thermostat" class="stat" :style="{ color: thermostatColor }" v-cloak>{{ thermostat.temp }}</div>
-        <button type="button" class="down arrow" @click="thermostat.temp--">▼</button>
-      </section>
-      <section>
         <label for="temp">Current Temp</label>
         <div class="arrow invisible">▲</div>
         <div id="temp" class="stat" :style="{ color: tempColor }" v-cloak>{{ currentTemp }}</div>
         <div class="arrow invisible">▼</div>
       </section>
+      <section>
+        <label for="thermostat">Thermostat</label>
+        <button type="button" class="up arrow" @click="thermostat.temp++">▲</button>
+        <div id="thermostat" class="stat" :style="{ color: thermostatColor }" v-cloak>{{ thermostat.temp }}</div>
+        <button type="button" class="down arrow" @click="thermostat.temp--">▼</button>
+      </section>
     </div>
 
     <script type="module">
       import { createApp } from 'vue'
+
+      // do a SHALLOW comparison of two object for equal values
+      const isEqual = (obj1, obj2) =>
+        Object.keys(obj1).length === Object.keys(obj2).length &&
+        Object.entries(obj1)
+        .every(([ key, val ]) => obj2[key] === val);
 
       const tempToColorMap = {
         18: '#1072EB',
@@ -170,13 +177,20 @@
       }
     
       createApp({
+        methods: {
+          async updateTemp() {
+            const [currentTemp, thermostat] = await Promise.all([
+              fetch('/api/v1/temp/').then(res => res.json()),
+              fetch('/api/v1/thermostat/').then(res => res.json()),
+            ])
+            this.currentTemp = Math.round(currentTemp)
+            this.thermostat = thermostat
+          }
+        },
         async mounted() {
-          const [currentTemp, thermostat] = await Promise.all([
-            fetch('/api/v1/temp/').then(res => res.json()),
-            fetch('/api/v1/thermostat/').then(res => res.json()),
-          ])
-          this.currentTemp = Math.round(currentTemp)
-          this.thermostat = thermostat
+          await this.updateTemp()
+          // update the temp and thermostat from server every 60 sec
+          setInterval(this.updateTemp, 60*1000)
         },
         data() {
           return {
@@ -185,6 +199,11 @@
           }
         },
         computed: {
+          // fix issue with old and new value being the same in `watch` method
+          // https://stackoverflow.com/a/74945916
+          thermostatComputed() {
+            return Object.assign({}, this.thermostat)
+          },
           thermostatColor() {
             return getTempColor(this.thermostat.temp)
           },
@@ -193,11 +212,17 @@
           }
         },
         watch: {
-          thermostat: {
+          thermostatComputed: {
             async handler(newValue, oldValue) {
-              if (!Object.keys(oldValue).length) {
-                // don't do anything if the old value was empty so we don't
-                // send a PATCH on initial page load
+              document.title = `Thermostat: ${newValue.temp}°${this.thermostat.unit}`
+              if (
+                // don't send an update if the old value was empty...
+                !Object.keys(oldValue).length ||
+                // or if the new temperature value is the same as the old one...
+                isEqual(oldValue, newValue)
+              ) {
+                // so we don't send an update on page load or when polling for
+                // updates from the server
                 return
               }
               await fetch('/api/v1/thermostat/', {
