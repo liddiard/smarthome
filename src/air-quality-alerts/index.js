@@ -86,7 +86,7 @@ const processMetrics = async (metric) => {
     isCrossingThreshold(medians, threshold))
 
   alerts.forEach(alert => {
-    const isIncreasing = pastMedian > currentMedian
+    const isIncreasing = currentMedian > pastMedian
     notify({ alert, latestReading, isIncreasing, metric })
   })
 }
