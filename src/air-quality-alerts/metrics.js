@@ -79,7 +79,13 @@ module.exports = {
     displayFunc: co2 => `${co2} ppm`,
     rules: [
       {
-        threshold: 1000,
+        threshold: 1200,
+        isUpperBound: true,
+        priority: 3,
+        icon: "face_exhaling"
+      },
+      {
+        threshold: 1500,
         isUpperBound: true,
         priority: 3,
         icon: "face_exhaling"
