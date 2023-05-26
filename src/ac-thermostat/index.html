@@ -200,6 +200,12 @@
           await this.updateTemp()
           // update the temp and thermostat from server every 60 sec
           setInterval(this.updateTemp, 60*1000)
+          // update temp and thermostat when the page is focused
+          document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+              this.updateTemp()
+            }
+          });
         },
         data() {
           return {
