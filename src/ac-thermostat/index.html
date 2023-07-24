@@ -176,11 +176,13 @@
       }
 
       const getTempColor = (temp) => {
-        if (temp < 18) {
-          return tempToColorMap[18]
+        const minTemp = 19
+        const maxTemp = 25
+        if (temp < minTemp) {
+          return tempToColorMap[minTemp]
         }
-        if (temp > 24) {
-          return tempToColorMap[24]
+        if (temp > maxTemp) {
+          return tempToColorMap[maxTemp]
         }
         return tempToColorMap[temp]
       }
