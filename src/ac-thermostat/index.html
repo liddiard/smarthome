@@ -130,13 +130,6 @@
     </style>
   </head>
   <body>
-    <script type="importmap">
-      {
-        "imports": {
-          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-        }
-      }
-    </script>
     <div id="app">
       <button type="button" id="power" :class="{ on: thermostat.on }" @click="thermostat.on = !thermostat.on">
         <span class="fg">⏻</span>
@@ -157,7 +150,7 @@
     </div>
 
     <script type="module">
-      import { createApp } from 'vue'
+      import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
       // do a SHALLOW comparison of two object for equal values
       const isEqual = (obj1, obj2) =>
