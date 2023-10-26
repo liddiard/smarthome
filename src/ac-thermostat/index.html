@@ -130,13 +130,6 @@
     </style>
   </head>
   <body>
-    <script type="importmap">
-      {
-        "imports": {
-          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-        }
-      }
-    </script>
     <div id="app">
       <button type="button" id="power" :class="{ on: thermostat.on }" @click="thermostat.on = !thermostat.on">
         <span class="fg">⏻</span>
@@ -157,7 +150,7 @@
     </div>
 
     <script type="module">
-      import { createApp } from 'vue'
+      import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
       // do a SHALLOW comparison of two object for equal values
       const isEqual = (obj1, obj2) =>
@@ -166,21 +159,23 @@
         .every(([ key, val ]) => obj2[key] === val);
 
       const tempToColorMap = {
-        18: '#1072EB',
-        19: '#3467C3',
-        20: '#615A91',
-        21: '#8A4E63',
-        22: '#B14238',
-        23: '#C63C20',
-        24: '#D9360B'
+        19: '#1072EB',
+        20: '#3467C3',
+        21: '#615A91',
+        22: '#8A4E63',
+        23: '#B14238',
+        24: '#C63C20',
+        25: '#D9360B'
       }
 
       const getTempColor = (temp) => {
-        if (temp < 18) {
-          return tempToColorMap[18]
+        const minTemp = 19
+        const maxTemp = 25
+        if (temp < minTemp) {
+          return tempToColorMap[minTemp]
         }
-        if (temp > 24) {
-          return tempToColorMap[24]
+        if (temp > maxTemp) {
+          return tempToColorMap[maxTemp]
         }
         return tempToColorMap[temp]
       }
