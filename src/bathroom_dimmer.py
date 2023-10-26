@@ -24,7 +24,6 @@ def get_schedule():
     """Returns today's schedule based on current sunrise and sunset times
     """
     sun_events = get_sun_events()
-    dawn = sun_events["dawn"]
     sunrise = sun_events["sunrise"]
     hour_before_sunset = sun_events["hour_before_sunset"]
     sunset = sun_events["sunset"]
@@ -33,8 +32,7 @@ def get_schedule():
     return {
         "02:00": 10,
         "03:00": 1,
-        dawn: 10,
-        sunrise: 80,
+        sunrise: 10,
         hour_before_sunset: 80,
         sunset: 67,
         "23:00": 33,
