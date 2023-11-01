@@ -24,8 +24,8 @@ def get_sun_events():
         "New York, NY",
         "United States",
         "America/New_York",
-        40.7, # lat
-        -73.9 # lon
+        40.8, # lat
+        -74.0 # lon
     )
     schedule = sun(location.observer, date=date.today(), tzinfo=location.timezone)
     events = {}
