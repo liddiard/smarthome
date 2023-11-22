@@ -109,30 +109,30 @@ module.exports = {
     displayName: 'PM2.5',
     displayFunc: pm25 => `${pm25} µg/m³`,
     rules: [
-      {
-        threshold: 60,
-        isUpperBound: true,
-        priority: 2,
-        icon: "mask"
-      },
-      {
-        threshold: 90,
-        isUpperBound: true,
-        priority: 3,
-        icon: "mask"
-      },
-      {
-        threshold: 120,
-        isUpperBound: true,
-        priority: 3,
-        icon: "mask"
-      },
-      {
-        threshold: 200,
-        isUpperBound: true,
-        priority: 4,
-        icon: "mask"
-      }
+      // {
+      //   threshold: 60,
+      //   isUpperBound: true,
+      //   priority: 2,
+      //   icon: "mask"
+      // },
+      // {
+      //   threshold: 90,
+      //   isUpperBound: true,
+      //   priority: 3,
+      //   icon: "mask"
+      // },
+      // {
+      //   threshold: 120,
+      //   isUpperBound: true,
+      //   priority: 3,
+      //   icon: "mask"
+      // },
+      // {
+      //   threshold: 200,
+      //   isUpperBound: true,
+      //   priority: 4,
+      //   icon: "mask"
+      // }
     ]
   }
 }
