@@ -28,7 +28,7 @@ const getMedian = (arr = []) => {
 // previous call for comparison
 const getReadings = async (query) => {
   const sampleWindow = `${CALL_FREQUENCY_MINS*2}m`
-  const res = await axios.get(`http://pi:9090/api/v1/query?query=${query}[${sampleWindow}]`)
+  const res = await axios.get(`http://smarthome:9090/api/v1/query?query=${query}[${sampleWindow}]`)
   return res.data.data.result[0].values.map(([_, val]) => Number(val))
 }
 
